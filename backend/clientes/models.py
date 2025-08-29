@@ -18,6 +18,7 @@ class Cliente(models.Model):
 class Contacto(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="contactos")
     telefono = models.CharField(max_length=20)
+    email = models.EmailField(unique=True)
     direccion = models.TextField()
 
     class Meta:
