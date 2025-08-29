@@ -4,6 +4,7 @@ from clientes.models import Cliente
 
 class Credito(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=255)
     monto_total = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_inicio = models.DateField()
 
@@ -30,6 +31,7 @@ class Pago(models.Model):
 
 class Ahorro(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=255)
     fecha = models.DateField()
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     saldo_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
