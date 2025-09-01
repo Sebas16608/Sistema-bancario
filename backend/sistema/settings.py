@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'clientes.apps.ClientesConfig',
     'users.apps.UsersConfig',
     'loan.apps.LoanConfig',
+    'transacciones.apps.TransaccionesConfig',
     'rest_framework',
 ]
 
