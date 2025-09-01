@@ -6,7 +6,7 @@ from .models import Cliente, Contacto, Documents
 
 class ClienteView(APIView):
     # Metodo Get
-    def get_cliente(self, request, pk=None):
+    def get(self, request, pk=None):
         if pk:
             try:
                 cliente = Cliente.objects.get(pk=pk)
@@ -18,3 +18,12 @@ class ClienteView(APIView):
             cliente = Cliente.objects.all()
             serializer = ClienteSerializer(cliente, many=True)
             return Response(serializer.data)
+    
+    # Metodo POST
+    def post(self, request):
+        serializer = ClienteSerializer
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
