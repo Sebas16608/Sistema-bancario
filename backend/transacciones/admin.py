@@ -1,5 +1,4 @@
 from django.contrib import admin
-from transacciones.models import Cuenta, Movimiento
+from transacciones.models import Transaccion
 # Register your models here.
-admin.site.register(Cuenta)
-admin.site.register(Movimiento)
+admin.site.register(Transaccion)
