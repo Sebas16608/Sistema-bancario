@@ -1,27 +1,46 @@
 from django.db import models
 from clientes.models import Cliente
-# Create your models here.
-class Cuenta(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=255)
-    pago = models.DecimalField(max_digits=10, decimal_places=2)
+from loan.models import Ahorro, Pago
 
-    class Meta:
-        verbose_name = "Cuenta"
-        verbose_name_plural = "Cuentas"
+class Transaccion(models.Model):
+    TIPO_CHOICES = [
+        ("DEPOSITO", "Depósito"),
+        ("RETIRO", "Retiro"),
+        ("PAGO", "Pago"),
+    ]
 
-    def __str__(self):
-        return f"El pago de {self.pago} fue exitoso en la cuenta de {self.cliente}"
-    
-class Movimiento(models.Model):
-    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-    tipo = models.CharField(max_length=255)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="transacciones")
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
+    monto = models.DecimalField(max_digits=12, decimal_places=2)
     fecha = models.DateTimeField(auto_now_add=True)
 
+    # Opcional, solo uno se usará por transacción
+    ahorro = models.ForeignKey(Ahorro, on_delete=models.CASCADE, null=True, blank=True, related_name="transacciones")
+    pago = models.ForeignKey(Pago, on_delete=models.CASCADE, null=True, blank=True, related_name="transacciones")
+
+    def save(self, *args, **kwargs):
+        # Si es depósito o retiro, actualizar total del ahorro
+        if self.ahorro:
+            if self.tipo == "DEPOSITO":
+                self.ahorro.monto_inicial += self.monto
+            elif self.tipo == "RETIRO":
+                self.ahorro.monto_inicial -= self.monto
+            self.ahorro.save()
+
+        # Si es pago de crédito, actualizar saldo_restante
+        if self.pago and self.tipo == "PAGO":
+            total_pagado = Pago.objects.filter(credito=self.pago.credito).exclude(pk=self.pago.pk).aggregate(
+                total=models.Sum('pago')
+            )['total'] or 0
+            self.pago.saldo_restante = self.pago.credito.monto_inicial - (total_pagado + self.pago.pago)
+            self.pago.save()
+
+        super().save(*args, **kwargs)
+
     class Meta:
-        verbose_name = "Movimiento"
-        verbose_name_plural = "Movimientos"
-    
+        verbose_name = "Transacción"
+        verbose_name_plural = "Transacciones"
+
     def __str__(self):
-        return f"movimiento de Q{self.monto} realizado correctamente"
+        destino = self.ahorro or self.pago
+        return f"{self.tipo} de Q{self.monto} - {destino} - {self.fecha.strftime('%Y-%m-%d %H:%M')}"
