@@ -97,7 +97,7 @@ class ContactoView(APIView):
         except Contacto.DoesNotExist:
             return Response({"error": "Cliente no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         
-        Cliente.delete()
+        contacto.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
 """
@@ -116,11 +116,35 @@ class DocView(APIView):
 
         else:
             documents = Documents.objects.all()
-            serializer = DocumentsSerializer(Documentos, many=True)
+            serializer = DocumentsSerializer(Documents, many=True)
             return Response(serializer.data)
-
+        
+    # Metodo POST
     def post(self, request):
+        serializer = DocumentsSerializer
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Metodo PUT
+    def put(self, request, pk):
+        try:
+            documents = Documents.objects.get(pk=pk)
+        except Contacto.DoesNotExist:
+            return Response({"error": "No se encuentra el documento"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = DocumentsSerializer(documents, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Metodo DELETE
+    def delete(self, request, pk):
+        try:
+            documents = Documents.objects.get(pk=pk)
+        except Documents.DoesNotExist:
+            return Response({"error": "Documento no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        
+        documents.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
