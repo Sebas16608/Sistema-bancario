@@ -3,7 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ClienteSerializer, ContactoSerializer, DocumentsSerliarizer
 from .models import Cliente, Contacto, Documents
-
+"""
+API Clientes
+"""
 class ClienteView(APIView):
     # Metodo Get
     def get(self, request, pk=None):
@@ -49,3 +51,21 @@ class ClienteView(APIView):
         
         cliente.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+"""
+API Contacto
+"""
+class ContactoView(APIView):
+    # Metodo GET
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                contacto = Contacto.objects.get(pk=pk)
+                serializer = ContactoSerializer(contacto,)
+                return Response(serializer.data)
+            except Contacto.DoesNotExist:
+                return Response({"error": "Contacto no existente"})
+        else:
+            contacto = Contacto.objects.all()
+            serializer = ContactoSerializer(contacto, many=True)
+            return Response(serializer.data)
