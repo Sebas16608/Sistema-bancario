@@ -1,12 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
-from clientes import views
-
-router= routers.DefaultRouter()
-router.register(r"cliente", views.ClienteView)
-router.register(r"contacto", views.ContactoView)
-router.register(r"documentos", views.DocView)
+from .views import ClienteView
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path("cliente/", ClienteView.as_view(), name="cliente-list"),
+    path("cliente/<int:pk>/", ClienteView.as_view, name='cliente-detail')
 ]

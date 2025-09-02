@@ -64,8 +64,15 @@ class ContactoView(APIView):
                 serializer = ContactoSerializer(contacto,)
                 return Response(serializer.data)
             except Contacto.DoesNotExist:
-                return Response({"error": "Contacto no existente"})
+                return Response({"error": "Contacto no no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         else:
             contacto = Contacto.objects.all()
             serializer = ContactoSerializer(contacto, many=True)
             return Response(serializer.data)
+
+    # Metodo POST
+    def post(self, request):
+        serializer = ContactoSerializer
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
