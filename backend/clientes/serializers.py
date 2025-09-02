@@ -11,7 +11,7 @@ class ContactoSerializer(serializers.ModelSerializer):
         model = Contacto
         fields = "__all__"
 
-class DocumentsSerliarizer(serializers.ModelSerializer):
+class DocumentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documents
         fields = "__all__"

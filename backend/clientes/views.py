@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ClienteSerializer, ContactoSerializer, DocumentsSerliarizer
+from .serializers import ClienteSerializer, ContactoSerializer, DocumentsSerializer
 from .models import Cliente, Contacto, Documents
 """
 API Clientes
@@ -61,7 +61,7 @@ class ContactoView(APIView):
         if pk:
             try:
                 contacto = Contacto.objects.get(pk=pk)
-                serializer = ContactoSerializer(contacto,)
+                serializer = ContactoSerializer(contacto, many=True)
                 return Response(serializer.data)
             except Contacto.DoesNotExist:
                 return Response({"error": "Contacto no no encontrado"}, status=status.HTTP_404_NOT_FOUND)
@@ -89,7 +89,8 @@ class ContactoView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+   
+   # Metodo DELETE
     def delete(self, request, pk):
         try:
             contacto = Contacto.objects.get(pk=pk)
@@ -99,5 +100,27 @@ class ContactoView(APIView):
         Cliente.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
+"""
+API Documentos
+"""
+class DocView(APIView):
+    # Metodo Get
+    def get(self, request, pk):
+        if pk:
+            try:
+                documents = Documents.objects.get(pk=pk)
+                serializer = DocumentsSerializer(documents, many=True)
+                return Response(serializer.data)
+            except Documents.DoesNotExit:
+                return Response({"error": "El documento no existe"}, status=status.http_404_NOT_FOUND)
 
-    
+        else:
+            documents = Documents.objects.all()
+            serializer = DocumentsSerializer(Documentos, many=True)
+            return Response(serializer.data)
+
+    def post(self, request):
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
