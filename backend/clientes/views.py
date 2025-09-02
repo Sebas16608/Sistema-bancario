@@ -76,3 +76,18 @@ class ContactoView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Metodo PUT
+    def put(self, request, pk):
+        try:
+            contacto = Contacto.objects.get(pk=pk)
+        except Contacto.DoesNotExist:
+            return Response({"error": "Contacto No encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ContactoSerializer(contacto, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
