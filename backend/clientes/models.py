@@ -37,7 +37,15 @@ class Contacto(models.Model):
 # Documentos     
 class Documents(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="documents")
-    identifiacion = models.CharField(max_length=100)
+
+    IDENTIFICACIONES = [
+        ("DPI", "DPI"),
+        ("PASAPORTE", "Pasaporte"),
+        ("LICENCIA", "Licencia"),
+        ("CERTIFICADO", "Certificado de Nacimiento")
+    ]
+
+    identifiacion = models.CharField(max_length=100, choices=IDENTIFICACIONES)
     no_identificacion = models.CharField(max_length=30)
     
     VIVIENDA = [
