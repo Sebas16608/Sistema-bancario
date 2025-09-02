@@ -90,6 +90,14 @@ class ContactoView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, )
-    
+    def delete(self, request, pk):
+        try:
+            contacto = Contacto.objects.get(pk=pk)
+        except Contacto.DoesNotExist:
+            return Response({"error": "Cliente no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        
+        Cliente.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+
     
