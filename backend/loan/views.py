@@ -235,3 +235,21 @@ class AhorroView(APIView):
         
         ahorro.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+"""
+API deposito
+"""
+class DepositoView(APIView):
+    # Metodo Get
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                depostio = Deposito.objects.get(pk=pk)
+                serializer = DepositoSerializer(depostio, many=True)
+                return(serializer.data)
+            except Deposito.DoesNotExist:
+                return Response({"error": "Deposito no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            depostio = Deposito.objects.all()
+            serializer = DepositoSerializer(depostio, many=True)
+            return Response(serializer.data)
