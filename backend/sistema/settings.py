@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = "users.Usuario"
 
 
 # Application definition
@@ -40,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clientes.apps.ClientesConfig',
-    'users.apps.UsersConfig',
+    'user.apps.UserConfig',
     'loan.apps.LoanConfig',
     'transacciones.apps.TransaccionesConfig',
     'rest_framework',

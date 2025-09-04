@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import CreditoSerializer, PagoSerializer, AhorroSerializer, DepositoSerializer
+from .serializers import CreditoSerializer, PagoSerializer, AhorroSerializer, DepositoSerializer
 from .models import Credito, Pago, Ahorro, Deposito
 
 """
@@ -240,7 +240,6 @@ class AhorroView(APIView):
 API deposito
 """
 class DepositoView(APIView):
-    # Metodo Get
     def get(self, request, pk=None):
         if pk:
             try:
@@ -253,3 +252,34 @@ class DepositoView(APIView):
             depostio = Deposito.objects.all()
             serializer = DepositoSerializer(depostio, many=True)
             return Response(serializer.data)
+    
+    def post(self, request):
+        try:
+            serializer = DepositoSerializer
+            if serializer.is_valid:
+                serializer.save()
+                return Response(serializer.data)
+        except Deposito.DoesNotExist:
+            return Response({"error": "El deposito no fue encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, pk):
+        try:
+            deposito = Deposito.objects.get(pk=pk)
+        except Deposito.DoesNotExist:
+            return Response({"error": "El deposito no fue encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DepositoSerializer(deposito, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.erros, stautus=status.HTTP_400_BAD_REQUEST)    
+    
+    def delete(self, request, pk):
+        try:
+            deposito = Deposito.objects.get(pk=pk)
+        except Deposito.DoesNotExist:
+            return Response({"error": "El deposito no fue encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        
+        deposito.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
