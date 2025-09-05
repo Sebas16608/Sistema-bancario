@@ -9,7 +9,7 @@ class TransaccionView(APIView):
         if pk:
             try:
                 transacciones = Transaccion.objects.get(pk=pk)
-                serializer = TransaccionSerializer(transacciones, many=True)
+                serializer = TransaccionSerializer(transacciones)
                 return Response(serializer.data)
             except Transaccion.DoesNotExist:
                 return Response({"error": "Transaccion no encontrada"}, status=status.HTTP_404_NOT_FOUND)

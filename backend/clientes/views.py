@@ -61,7 +61,7 @@ class ContactoView(APIView):
         if pk:
             try:
                 contacto = Contacto.objects.get(pk=pk)
-                serializer = ContactoSerializer(contacto, many=True)
+                serializer = ContactoSerializer(contacto)
                 return Response(serializer.data)
             except Contacto.DoesNotExist:
                 return Response({"error": "Contacto no no encontrado"}, status=status.HTTP_404_NOT_FOUND)
@@ -109,7 +109,7 @@ class DocView(APIView):
         if pk:
             try:
                 documents = Documents.objects.get(pk=pk)
-                serializer = DocumentsSerializer(documents, many=True)
+                serializer = DocumentsSerializer(documents)
                 return Response(serializer.data)
             except Documents.DoesNotExit:
                 return Response({"error": "El documento no existe"}, status=status.http_404_NOT_FOUND)

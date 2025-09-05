@@ -9,7 +9,7 @@ class UserView(APIview):
         if pk:
             try:
                 users = User.objects.get(pk=pk)
-                serializer = UserSerializer(users, many=True)
+                serializer = UserSerializer(users)
                 return Response(serializers.data)
             except User.DoesNotExist:
                 return Response({"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)

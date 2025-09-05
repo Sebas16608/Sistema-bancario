@@ -196,7 +196,7 @@ class AhorroView(APIView):
         if pk:
             try:
                 ahorro = Ahorro.objects.get(pk=pk)
-                serializer = AhorroSerializer(ahorro, many=True)
+                serializer = AhorroSerializer(ahorro)
                 return Response(serializer.data)
             except Ahorro.DoesNotExist:
                 return Response({"error": "El ahorro no fue encontrado"}, status=status.HTTP_404_NOT_FOUND)
@@ -244,7 +244,7 @@ class DepositoView(APIView):
         if pk:
             try:
                 depostio = Deposito.objects.get(pk=pk)
-                serializer = DepositoSerializer(depostio, many=True)
+                serializer = DepositoSerializer(depostio)
                 return(serializer.data)
             except Deposito.DoesNotExist:
                 return Response({"error": "Deposito no encontrado"}, status=status.HTTP_404_NOT_FOUND)
