@@ -12,7 +12,7 @@ Este es un **sistema bancario de ejemplo** desarrollado con **Django** y **Pytho
 
 ## 🛠️ Tecnologías utilizadas
 
-- Python 3.x
+- Python 3.13.7
 - Django
 - HTML, CSS y JavaScript
 - **SQLite3** (desarrollo)
