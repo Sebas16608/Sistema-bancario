@@ -31,3 +31,6 @@ htmlcov/
 
 # Archivos de vscode
 .vscodes
+
+# Archivo .env
+.env
