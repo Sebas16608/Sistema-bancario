@@ -1,10 +1,10 @@
-from rest_framework.views import APIview
+from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import User
 # Create your views here.
-class UserView(APIview):
+class UserView(APIView):
     def get(self, request, pk=None):
         if pk:
             try:
