@@ -14,6 +14,8 @@ class Credito(models.Model):
         ("RECHAZADO", "Rechazado"),
     ]
 
+    estado = models.CharField(max_length=200, choices=ESTADOS, default="Pendiente")
+
     def __str__(self):
         return f"Crédito de {self.monto_inicial} - {self.cliente}"
 

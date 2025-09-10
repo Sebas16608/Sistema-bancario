@@ -23,7 +23,7 @@ class ClienteView(APIView):
     
     # Metodo POST
     def post(self, request):
-        serializer = ClienteSerializer
+        serializer = ClienteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -72,7 +72,7 @@ class ContactoView(APIView):
 
     # Metodo POST
     def post(self, request):
-        serializer = ContactoSerializer
+        serializer = ContactoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -121,7 +121,7 @@ class DocView(APIView):
         
     # Metodo POST
     def post(self, request):
-        serializer = DocumentsSerializer
+        serializer = DocumentsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
